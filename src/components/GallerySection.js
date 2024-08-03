@@ -28,7 +28,7 @@ const GallerySection = () => {
       // console.log('API response:', data);
       if (response.ok) {
         const imagePromises = data.map(async (image) => {
-          const fullUrl = `${process.env.REACT_APP_API_URL}${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
+          const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
           try {
             const imageResponse = await fetch(fullUrl);
             const blob = await imageResponse.blob();

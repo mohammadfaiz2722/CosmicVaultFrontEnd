@@ -41,7 +41,7 @@ const Navbar = () => {
     { to: '/uploadsection', label: 'Upload', requireAuth: true },
     { to: '/contactsection', label: 'Contact' },
   ];
-  
+
   const CosmicButton = ({ children, onClick, className }) => (
     <button
       onClick={onClick}
@@ -60,7 +60,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className={` top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#050510] shadow-lg' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#050510] shadow-lg' : 'bg-transparent'}`}>
       <div className="container mx-auto px-4 py-3 md:py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold" style={{ fontFamily: 'Orbitron, sans-serif', color: '#8A2BE2' }}>
@@ -96,13 +96,44 @@ const Navbar = () => {
           </div>
 
           {/* Hamburger Menu */}
-          {/* ... (remains the same) */}
+          <button
+            className="md:hidden text-white focus:outline-none"
+            onClick={toggleMenu}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              {isMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+              )}
+            </svg>
+          </button>
         </div>
 
         {/* Mobile Menu */}
-        <div className={`md:hidden absolute left-0 right-0 bg-[#050510] transition-all duration-300 ease-in-out overflow-hidden ${isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
-          <div className="px-4 py-2 space-y-3">
-            {/* ... (other mobile menu items remain the same) */}
+        <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
+          <div className="flex flex-col items-center space-y-4 py-4">
+            {navLinks.map((link) => (
+              (!link.requireAuth || isLoggedIn) && (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`text-white hover:text-cyan-400 transition duration-300 ${location.pathname === link.to ? 'border-b-2 border-cyan-400' : ''}`}
+                  onClick={closeMenu}
+                >
+                  {link.label}
+                </Link>
+              )
+            ))}
+            {isLoggedIn && (
+              <Link
+                to="/profilesection"
+                className={`text-white hover:text-cyan-400 transition duration-300 ${location.pathname === '/profilesection' ? 'border-b-2 border-cyan-400' : ''}`}
+                onClick={closeMenu}
+              >
+                Profile
+              </Link>
+            )}
             {isLoggedIn ? (
               <CosmicButton onClick={handleLogOut} className="w-full">Log Out</CosmicButton>
             ) : (

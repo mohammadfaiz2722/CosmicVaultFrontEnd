@@ -22,7 +22,7 @@ const SignUp = () => {
     e.preventDefault();
     localStorage.setItem('email', email);
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/createuser`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/createuser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
