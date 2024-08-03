@@ -1,0 +1,109 @@
+.void-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #050510;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.void-circle {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.2) 0%, rgba(5, 5, 16, 0) 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: all 0.1s ease;
+}
+
+.content {
+  text-align: center;
+  z-index: 1;
+}
+
+.void-text {
+  font-size: 15rem;
+  font-weight: bold;
+  color: transparent;
+  -webkit-text-stroke: 2px #8A2BE2;
+  margin: 0;
+  letter-spacing: 10px;
+  position: relative;
+}
+
+.void-text::before {
+  content: "404";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  color: #8A2BE2;
+  -webkit-text-stroke: 0px #8A2BE2;
+  border-right: 2px solid #8A2BE2;
+  overflow: hidden;
+  animation: animate 6s linear infinite;
+}
+
+@keyframes animate {
+  0%, 10%, 100% {
+    width: 0;
+  }
+  70%, 90% {
+    width: 100%;
+  }
+}
+
+.void-message {
+  font-size: 1.5rem;
+  color: #E6E6FA;
+  margin-top: 1rem;
+  letter-spacing: 5px;
+  opacity: 0;
+  animation: fadeIn 2s ease-out forwards;
+  animation-delay: 1s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.void-link {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.8rem 1.5rem;
+  color: #E6E6FA;
+  text-decoration: none;
+  border: 1px solid #8A2BE2;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.void-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.2), transparent);
+  transition: all 0.5s ease;
+}
+
+.void-link:hover::before {
+  left: 100%;
+}
+
+.void-link:hover {
+  background: rgba(138, 43, 226, 0.1);
+  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+}

@@ -1,0 +1,108 @@
+.cosmic-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    background: rgba(10, 10, 20, 0.9);
+    backdrop-filter: blur(10px);
+    color: var(--text-color);
+    font-family: 'Orbitron', sans-serif;
+    z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+    min-width: 300px;
+  }
+  
+  .cosmic-notification.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  
+  .cosmic-notification-content {
+    display: flex;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .cosmic-notification-icon {
+    font-size: 1.8rem;
+    margin-right: 15px;
+  }
+  
+  .cosmic-notification-message {
+    margin: 0;
+    font-size: 1rem;
+    flex-grow: 1;
+  }
+  
+  .cosmic-notification-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 15px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  
+  .cosmic-notification-close:hover {
+    opacity: 1;
+  }
+  
+  .cosmic-notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: width 0.1s linear;
+  }
+  
+  .cosmic-notification-stardust {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+      radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+      radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+      radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
+    background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px;
+    background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+    animation: stardust 120s linear infinite;
+    z-index: 1;
+  }
+  
+  @keyframes stardust {
+    0% {
+      background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+    }
+    100% {
+      background-position: -550px -550px, -310px -290px, -120px -280px, -80px -50px;
+    }
+  }
+  
+  .cosmic-notification.success {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+  }
+  
+  .cosmic-notification.error {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+  }
+  
+  .cosmic-notification.warning {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+  }
+  
+  .cosmic-notification.info {
+    box-shadow: 0 0 20px rgba(0, 191, 255, 0.5);
+  }

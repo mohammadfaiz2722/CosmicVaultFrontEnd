@@ -1,0 +1,68 @@
+{
+  "name": "photogallery",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.14",
+    "@react-three/drei": "^9.109.2",
+    "@react-three/fiber": "^8.16.8",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "autoprefixer": "^10.4.19",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "framer-motion": "^11.3.19",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "masonry-layout": "^4.2.2",
+    "mongoose": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.14",
+    "nodemon": "^3.1.4",
+    "path": "^0.12.7",
+    "postcss": "^8.4.39",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.2.1",
+    "react-router-dom": "^6.25.1",
+    "react-scripts": "5.0.1",
+    "tailwind": "^4.0.0",
+    "three": "^0.167.0",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "both": "concurrently \"npm run start\" \"nodemon backend/index.js\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.4"
+  }
+}

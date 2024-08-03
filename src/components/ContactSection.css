@@ -1,0 +1,133 @@
+.contact-section {
+    padding: 8rem 2rem;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-darker);
+  }
+  
+  .contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .contact-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+  
+  .contact-info {
+    flex: 1;
+  }
+  
+  .contact-info h3 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .contact-info p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  .contact-info ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .contact-info li {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .contact-info li::before {
+    content: attr(data-icon);
+    margin-right: 10px;
+    font-size: 1.5rem;
+  }
+  
+  .contact-form {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    color: var(--text-color);
+    font-size: 1rem;
+  }
+  
+  .form-group textarea {
+    height: 150px;
+    resize: vertical;
+  }
+  
+  .cosmic-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    text-decoration: none;
+    color: var(--text-color);
+    background: transparent;
+    border: 2px solid var(--primary-color);
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    z-index: 1;
+    cursor: pointer;
+  }
+  
+  .cosmic-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transition: all 0.5s ease;
+    z-index: -1;
+  }
+  
+  .cosmic-btn:hover::before {
+    width: 100%;
+  }
+  
+  .cosmic-btn:hover {
+    color: var(--bg-darker);
+  }
+  
+  @media (max-width: 768px) {
+    .contact-content {
+      flex-direction: column;
+    }
+    
+    .contact-form,
+    .contact-info {
+      width: 100%;
+    }
+  }
