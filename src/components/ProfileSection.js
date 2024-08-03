@@ -16,7 +16,7 @@ if(!localStorage.getItem('token'))
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/auth/getuser`, {
+        const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/getuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"

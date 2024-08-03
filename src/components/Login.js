@@ -21,7 +21,7 @@ const Login = () => {
     localStorage.setItem('email', email);
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/login`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/login`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
