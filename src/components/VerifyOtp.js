@@ -38,7 +38,7 @@ const OTPVerification = () => {
       try {
         const email=localStorage.getItem('email')
         const otpToken=localStorage.getItem('otpToken')
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/verifyotp`, {
+        const response = await fetch(`http://localhost:5000/api/auth/verifyotp`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -21,7 +21,7 @@ const GallerySection = () => {
     try {
       const userId = localStorage.getItem('id');
       // console.log('Fetching images for user ID:', userId);
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/photos/user/${userId}`, {
+      const response = await fetch(`http://localhost:5000/api/photos/user/${userId}`, {
         credentials: 'include'
       });
       const data = await response.json();

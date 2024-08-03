@@ -63,7 +63,7 @@ const UploadPage = () => {
     formData.append('userId', localStorage.getItem('id'));
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/photos/upload`, {
+      const response = await fetch(`http://localhost:5000/api/photos/upload`, {
         method: 'POST',
         body: formData
       });

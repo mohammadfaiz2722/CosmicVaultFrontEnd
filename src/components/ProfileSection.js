@@ -16,7 +16,7 @@ if(!localStorage.getItem('token'))
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/getuser`, {
+        const response = await fetch(`http://localhost:5000/api/auth/getuser`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
