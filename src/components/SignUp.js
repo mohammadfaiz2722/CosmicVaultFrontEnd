@@ -7,8 +7,9 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // State for loading status
   const { logIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -20,6 +21,7 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state to true
     localStorage.setItem('email', email);
     try {
       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/createuser`, {
@@ -47,6 +49,8 @@ const SignUp = () => {
     } catch (error) {
       console.error('Sign-up error:', error);
       setNotification({ message: 'An unexpected error occurred. Please try again later.', type: 'error' });
+    } finally {
+      setIsLoading(false); // Set loading state to false
     }
   };
 
@@ -87,7 +91,7 @@ const SignUp = () => {
             <label htmlFor="password" className="block text-lavender mb-2">Password</label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"} // Toggle input type
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -99,15 +103,16 @@ const SignUp = () => {
                 onClick={togglePasswordVisibility}
                 className="absolute inset-y-0 right-0 flex items-center px-3 text-lavender focus:outline-none"
               >
-                {showPassword ? 'Hide' : 'Show'} {/* Button text */}
+                {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
           </div>
           <button
             type="submit"
             className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2 focus:ring-offset-[#070714] transition duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+            disabled={isLoading} // Disable button when loading
           >
-            Create Your Vault
+            {isLoading ? 'Signing Up...' : 'Create Your Vault'} {/* Change button text based on loading state */}
           </button>
         </form>
         <p className="mt-6 text-center text-lavender">
