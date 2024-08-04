@@ -20,12 +20,10 @@ const GallerySection = () => {
   const fetchAndLoadImages = useCallback(async () => {
     try {
       const userId = localStorage.getItem('id');
-      // console.log('Fetching images for user ID:', userId);
       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`, {
         credentials: 'include'
       });
       const data = await response.json();
-      // console.log('API response:', data);
       if (response.ok) {
         const imagePromises = data.map(async (image) => {
           const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
@@ -41,7 +39,6 @@ const GallerySection = () => {
         });
         const loadedImages = await Promise.all(imagePromises);
         setImages(loadedImages);
-        // console.log('Loaded images:', loadedImages);
       } else {
         console.error('Error fetching images:', data.error);
         setError('Failed to fetch images. Please try again later.');
@@ -81,7 +78,7 @@ const GallerySection = () => {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/photos/delete/${imageId}`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +90,6 @@ const GallerySection = () => {
       if (response.ok) {
         setImages(images.filter((image) => image._id !== imageId));
         setNotification({ type: 'success', message: 'Photo deleted successfully' });
-        // console.log('Image deleted successfully');
       } else {
         console.error('Error deleting image:', data.error);
         setError('Failed to delete image. Please try again later.');
@@ -107,7 +103,6 @@ const GallerySection = () => {
   };
 
   const handleSave = (imageUrl) => {
-    // console.log(`Save photo URL: ${imageUrl}`);
     downloadImage(imageUrl);
   };
 
@@ -246,9 +241,8 @@ const GallerySection = () => {
 
       {notification && (
         <CosmicNotification
-          message={notification.message}
           type={notification.type}
-          duration={5000}
+          message={notification.message}
           onClose={() => setNotification(null)}
         />
       )}
