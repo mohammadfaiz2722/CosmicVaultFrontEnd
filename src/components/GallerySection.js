@@ -20,15 +20,23 @@ const GallerySection = () => {
   const fetchAndLoadImages = useCallback(async () => {
     try {
       const userId = localStorage.getItem('id');
+      const token = localStorage.getItem('token');
       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`, {
-        credentials: 'include'
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await response.json();
       if (response.ok) {
         const imagePromises = data.map(async (image) => {
           const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
           try {
-            const imageResponse = await fetch(fullUrl);
+            const imageResponse = await fetch(fullUrl, {
+              headers: {
+                'Authorization': `Bearer ${token}`
+              }
+            });
+            if (!imageResponse.ok) throw new Error('Failed to fetch image');
             const blob = await imageResponse.blob();
             const objectUrl = URL.createObjectURL(blob);
             return { ...image, photoUrl: objectUrl };
@@ -78,11 +86,12 @@ const GallerySection = () => {
     }
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -90,14 +99,15 @@ const GallerySection = () => {
       if (response.ok) {
         setImages(images.filter((image) => image._id !== imageId));
         setNotification({ type: 'success', message: 'Photo deleted successfully' });
+        if (selectedImage && selectedImage._id === imageId) {
+          closeImageModal();
+        }
       } else {
         console.error('Error deleting image:', data.error);
-        setError('Failed to delete image. Please try again later.');
-        setNotification({ type: 'error', message: 'Failed to delete image' });
+        setNotification({ type: 'error', message: 'Failed to delete image: ' + data.error });
       }
     } catch (error) {
       console.error('Delete error:', error);
-      setError('An error occurred while deleting the image. Please try again later.');
       setNotification({ type: 'error', message: 'An error occurred while deleting the image' });
     }
   };
@@ -109,14 +119,14 @@ const GallerySection = () => {
   const downloadImage = (url) => {
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'image.jpg';
+    link.download = 'cosmic_image.jpg';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   if (isLoading) {
-    return <div className="text-white text-center">Loading...</div>;
+    return <div className="text-white text-center">Loading your cosmic images...</div>;
   }
 
   if (error) {
@@ -134,57 +144,61 @@ const GallerySection = () => {
         Your Cosmic Collection
       </motion.h1>
 
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 relative z-10"
-      >
-        {images.map((image) => (
-          <motion.div
-            key={image._id}
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative overflow-hidden rounded-2xl cursor-pointer shadow-lg bg-gray-800"
-            onClick={() => openImageModal(image)}
-          >
-            <img
-              src={image.photoUrl}
-              alt={image.title}
-              className="w-full h-64 object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-xl font-semibold font-['Orbitron'] mb-3">{image.title}</h3>
-                <div className="flex justify-between">
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors duration-300"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(image._id);
-                    }}
-                  >
-                    Delete
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors duration-300"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSave(image.photoUrl);
-                    }}
-                  >
-                    Save
-                  </motion.button>
+      {images.length === 0 ? (
+        <div className="text-white text-center">No images found. Start uploading to build your cosmic collection!</div>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 relative z-10"
+        >
+          {images.map((image) => (
+            <motion.div
+              key={image._id}
+              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileTap={{ scale: 0.95 }}
+              className="relative overflow-hidden rounded-2xl cursor-pointer shadow-lg bg-gray-800"
+              onClick={() => openImageModal(image)}
+            >
+              <img
+                src={image.photoUrl}
+                alt={image.title}
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <h3 className="text-xl font-semibold font-['Orbitron'] mb-3">{image.title}</h3>
+                  <div className="flex justify-between">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors duration-300"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(image._id);
+                      }}
+                    >
+                      Delete
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors duration-300"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSave(image.photoUrl);
+                      }}
+                    >
+                      Save
+                    </motion.button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      )}
 
       {selectedImage && (
         <motion.div
