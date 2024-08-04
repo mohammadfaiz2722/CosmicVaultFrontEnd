@@ -28,24 +28,10 @@ const GallerySection = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        const imagePromises = data.map(async (image) => {
-          const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
-          try {
-            const imageResponse = await fetch(fullUrl, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
-            });
-            if (!imageResponse.ok) throw new Error('Failed to fetch image');
-            const blob = await imageResponse.blob();
-            const objectUrl = URL.createObjectURL(blob);
-            return { ...image, photoUrl: objectUrl };
-          } catch (error) {
-            console.error(`Error loading image: ${fullUrl}`, error);
-            return { ...image, photoUrl: '/path/to/fallback/image.jpg' };
-          }
-        });
-        const loadedImages = await Promise.all(imagePromises);
+        const loadedImages = data.map(image => ({
+          ...image,
+          photoUrl: `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`
+        }));
         setImages(loadedImages);
       } else {
         console.error('Error fetching images:', data.error);
@@ -61,13 +47,6 @@ const GallerySection = () => {
 
   useEffect(() => {
     fetchAndLoadImages();
-    return () => {
-      images.forEach(image => {
-        if (image.photoUrl.startsWith('blob:')) {
-          URL.revokeObjectURL(image.photoUrl);
-        }
-      });
-    };
   }, [fetchAndLoadImages]);
 
   const openImageModal = (image) => {
@@ -113,7 +92,8 @@ const GallerySection = () => {
   };
 
   const handleSave = (imageUrl) => {
-    downloadImage(imageUrl);
+    const fullUrl = imageUrl.startsWith('http') ? imageUrl : `https://cosmicvaultbackendbismillah.onrender.com${imageUrl}`;
+    downloadImage(fullUrl);
   };
 
   const downloadImage = (url) => {
@@ -165,6 +145,10 @@ const GallerySection = () => {
                 src={image.photoUrl}
                 alt={image.title}
                 className="w-full h-64 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = '/path/to/fallback/image.jpg';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -219,6 +203,10 @@ const GallerySection = () => {
               src={selectedImage.photoUrl}
               alt={selectedImage.title}
               className="max-w-full max-h-[70vh] object-contain rounded-lg mb-6"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = '/path/to/fallback/image.jpg';
+              }}
             />
             <h2 className="text-3xl font-bold text-pink-500 mb-6 font-['Orbitron']">
               {selectedImage.title}
