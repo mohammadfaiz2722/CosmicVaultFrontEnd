@@ -6,8 +6,9 @@ import AuthContext from './AuthContext';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State for toggling password visibility
+  const [showPassword, setShowPassword] = useState(false);
   const [notification, setNotification] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading status
   const navigate = useNavigate();
   const { logIn } = useContext(AuthContext);
 
@@ -18,8 +19,9 @@ const Login = () => {
   }, [navigate]);
 
   const handleSubmit = async (e) => {
-    localStorage.setItem('email', email);
     e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
+    localStorage.setItem('email', email);
     try {
       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/login`, {
         method: 'POST',
@@ -45,6 +47,8 @@ const Login = () => {
     } catch (error) {
       console.error('Login error:', error);
       setNotification({ message: 'An unexpected error occurred. Please try again later.', type: 'error' });
+    } finally {
+      setLoading(false); // Set loading to false after the login process completes
     }
   };
 
@@ -74,7 +78,7 @@ const Login = () => {
             <label htmlFor="password" className="block text-lavender mb-2">Password</label>
             <div className="relative">
               <input
-                type={showPassword ? "text" : "password"} // Toggle input type
+                type={showPassword ? "text" : "password"}
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -86,7 +90,7 @@ const Login = () => {
                 onClick={togglePasswordVisibility}
                 className="absolute inset-y-0 right-0 flex items-center px-3 text-lavender focus:outline-none"
               >
-                {showPassword ? 'Hide' : 'Show'} {/* Button text */}
+                {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
           </div>
@@ -98,8 +102,9 @@ const Login = () => {
           <button
             type="submit"
             className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-full font-semibold focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+            disabled={loading} // Disable the button when loading
           >
-            Enter the Vault
+            {loading ? 'Logging in...' : 'Enter the Vault'} {/* Button text */}
           </button>
         </form>
         <p className="mt-6 text-center text-lavender">
