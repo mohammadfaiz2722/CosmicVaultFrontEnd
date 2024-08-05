@@ -12,6 +12,7 @@ import UploadSection from './components/UploadSection';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import OTPVerification from './components/VerifyOtp';
 import NotFound from './components/NotFound';
+import Footer from './components/Footer';
 function App() {
   return (
    <>
@@ -31,6 +32,7 @@ function App() {
         <Route path="/verifyotp" element={<OTPVerification/>} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
+      <Footer/>
     </Router>
    </>
   );
