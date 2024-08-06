@@ -267,7 +267,6 @@
 // export default GallerySection;
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 const PhotoGallery = () => {
     const [photos, setPhotos] = useState([]);
@@ -278,11 +277,26 @@ const PhotoGallery = () => {
         const fetchPhotos = async () => {
             try {
                 const userId = localStorage.getItem('id');
+                const token=localStorage.getItem('token')
                 if (!userId) {
                     throw new Error('User ID not found in localStorage');
                 }
-                const response = await axios.get(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`);
-                setPhotos(response.data);
+
+                const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`,
+                  {
+                    headers: {
+                                 'Authorization': `Bearer ${token}`
+                       } 
+                  }
+                );
+                
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json(); // Convert response to JSON
+                setPhotos(data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -292,7 +306,6 @@ const PhotoGallery = () => {
 
         fetchPhotos();
     }, []);
-
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 console.log(photos[0].photoUrl)
