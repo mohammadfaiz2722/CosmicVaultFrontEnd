@@ -90,7 +90,7 @@ const GallerySection = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/photos/delete/${imageId}`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
