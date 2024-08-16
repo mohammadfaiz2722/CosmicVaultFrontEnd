@@ -28,13 +28,13 @@ const GallerySection = () => {
       });
       if (!response.ok) throw new Error('Failed to fetch images');
       const data = await response.json();
-  
+
       const imagePromises = data.map(async (image) => {
         const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
         try {
           const cachedImage = localStorage.getItem(fullUrl);
           if (cachedImage) {
-            return { ...image, photoUrl: cachedImage };
+            return { ...image, photoUrl: cachedImage, isLoading: false };
           }
           const imageResponse = await fetch(fullUrl, {
             headers: {
@@ -45,10 +45,10 @@ const GallerySection = () => {
           const blob = await imageResponse.blob();
           const objectUrl = URL.createObjectURL(blob);
           localStorage.setItem(fullUrl, objectUrl); // Cache in localStorage
-          return { ...image, photoUrl: objectUrl };
+          return { ...image, photoUrl: objectUrl, isLoading: true };
         } catch (error) {
           console.error(`Error loading image: ${fullUrl}`, error);
-          return { ...image, photoUrl: '/path/to/fallback/image.jpg' };
+          return { ...image, photoUrl: '/path/to/fallback/image.jpg', isLoading: false };
         }
       });
       const loadedImages = await Promise.all(imagePromises);
@@ -60,7 +60,6 @@ const GallerySection = () => {
       setIsLoading(false);
     }
   }, []);
-  
 
   useEffect(() => {
     fetchAndLoadImages();
@@ -72,6 +71,14 @@ const GallerySection = () => {
       });
     };
   }, [fetchAndLoadImages]);
+
+  const handleImageLoad = (imageId) => {
+    setImages((prevImages) =>
+      prevImages.map((img) =>
+        img._id === imageId ? { ...img, isLoading: false } : img
+      )
+    );
+  };
 
   const openImageModal = (image) => {
     setSelectedImage(image);
@@ -164,11 +171,18 @@ const GallerySection = () => {
               className="relative overflow-hidden rounded-2xl cursor-pointer shadow-lg bg-gray-800"
               onClick={() => openImageModal(image)}
             >
-              <img
-                src={image.photoUrl}
-                alt={image.title}
-                className="w-full h-64 object-cover"
-              />
+              {image.isLoading ? (
+                <div className="flex items-center justify-center h-64 bg-gray-700">
+                  <span className="text-white">Loading...</span>
+                </div>
+              ) : (
+                <img
+                  src={image.photoUrl}
+                  alt={image.title}
+                  className="w-full h-64 object-cover"
+                  onLoad={() => handleImageLoad(image._id)}
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                   <h3 className="text-xl font-semibold font-['Orbitron'] mb-3">{image.title}</h3>
@@ -212,27 +226,23 @@ const GallerySection = () => {
           onClick={closeImageModal}
         >
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="relative"
-            onClick={(e) => e.stopPropagation()}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.8 }}
+            className="relative max-w-4xl max-h-4xl"
           >
             <img
               src={selectedImage.photoUrl}
               alt={selectedImage.title}
-              className="max-w-full max-h-[80vh] rounded-xl"
+              className="w-full h-auto max-h-[80vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
             />
-            <div className="absolute top-2 right-2">
-              <motion.button
-                whileHover={{ scale: 1.2 }}
-                whileTap={{ scale: 0.8 }}
-                className="text-white text-4xl font-bold"
-                onClick={closeImageModal}
-              >
-                &times;
-              </motion.button>
-            </div>
+            <button
+              onClick={closeImageModal}
+              className="absolute top-2 right-2 text-white text-2xl p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors duration-300"
+            >
+              &times;
+            </button>
           </motion.div>
         </motion.div>
       )}
@@ -249,4 +259,3 @@ const GallerySection = () => {
 };
 
 export default GallerySection;
-
