@@ -26,36 +26,33 @@ const GallerySection = () => {
           'Authorization': `Bearer ${token}`
         }
       });
+      if (!response.ok) throw new Error('Failed to fetch images');
       const data = await response.json();
-      if (response.ok) {
-        const imagePromises = data.map(async (image) => {
-          const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
-          try {
-            const cachedImage = sessionStorage.getItem(fullUrl);
-            if (cachedImage) {
-              return { ...image, photoUrl: cachedImage };
-            }
-            const imageResponse = await fetch(fullUrl, {
-              headers: {
-                'Authorization': `Bearer ${token}`
-              }
-            });
-            if (!imageResponse.ok) throw new Error('Failed to fetch image');
-            const blob = await imageResponse.blob();
-            const objectUrl = URL.createObjectURL(blob);
-            sessionStorage.setItem(fullUrl, objectUrl);
-            return { ...image, photoUrl: objectUrl };
-          } catch (error) {
-            console.error(`Error loading image: ${fullUrl}`, error);
-            return { ...image, photoUrl: '/path/to/fallback/image.jpg' };
+  
+      const imagePromises = data.map(async (image) => {
+        const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
+        try {
+          const cachedImage = localStorage.getItem(fullUrl);
+          if (cachedImage) {
+            return { ...image, photoUrl: cachedImage };
           }
-        });
-        const loadedImages = await Promise.all(imagePromises);
-        setImages(loadedImages);
-      } else {
-        console.error('Error fetching images:', data.error);
-        setError('Failed to fetch images. Please try again later.');
-      }
+          const imageResponse = await fetch(fullUrl, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (!imageResponse.ok) throw new Error('Failed to fetch image');
+          const blob = await imageResponse.blob();
+          const objectUrl = URL.createObjectURL(blob);
+          localStorage.setItem(fullUrl, objectUrl); // Cache in localStorage
+          return { ...image, photoUrl: objectUrl };
+        } catch (error) {
+          console.error(`Error loading image: ${fullUrl}`, error);
+          return { ...image, photoUrl: '/path/to/fallback/image.jpg' };
+        }
+      });
+      const loadedImages = await Promise.all(imagePromises);
+      setImages(loadedImages);
     } catch (error) {
       console.error('Fetch error:', error);
       setError('An error occurred while fetching images. Please try again later.');
@@ -63,6 +60,7 @@ const GallerySection = () => {
       setIsLoading(false);
     }
   }, []);
+  
 
   useEffect(() => {
     fetchAndLoadImages();
@@ -92,7 +90,7 @@ const GallerySection = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
+      const response = await fetch(`http://localhost:5000/api/photos/delete/${imageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -251,3 +249,4 @@ const GallerySection = () => {
 };
 
 export default GallerySection;
+
