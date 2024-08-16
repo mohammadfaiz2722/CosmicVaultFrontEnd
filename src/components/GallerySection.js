@@ -21,7 +21,7 @@ const GallerySection = () => {
     try {
       const userId = localStorage.getItem('id');
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://cosmic-vault-back-end-pr5g.vercel.app/api/photos/user/${userId}`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -30,7 +30,7 @@ const GallerySection = () => {
       const data = await response.json();
 
       const imagePromises = data.map(async (image) => {
-        const fullUrl = `https://cosmic-vault-back-end-pr5g.vercel.app${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
+        const fullUrl = `https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
         try {
           const cachedImage = localStorage.getItem(fullUrl);
           if (cachedImage) {
@@ -97,7 +97,7 @@ const GallerySection = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`https://cosmic-vault-back-end-pr5g.vercel.app/api/photos/delete/${imageId}`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
