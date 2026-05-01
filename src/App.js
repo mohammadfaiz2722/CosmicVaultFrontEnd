@@ -12,9 +12,16 @@ import UploadSection from './components/UploadSection';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import OTPVerification from './components/VerifyOtp';
 import NotFound from './components/NotFound';
+import Footer from './components/Footer';
+import { useEffect } from 'react';
+
 function App() {
+  useEffect(() => {
+    document.title = "Cosmic Vault";
+  }, []);
   return (
    <>
+   {/* document.title="je" */}
    {/* <UploadSection/> */}
    <Router>
    <Navbar/>
@@ -31,6 +38,7 @@ function App() {
         <Route path="/verifyotp" element={<OTPVerification/>} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
+      <Footer/>
     </Router>
    </>
   );
