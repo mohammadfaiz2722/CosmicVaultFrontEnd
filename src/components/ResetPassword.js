@@ -18,7 +18,7 @@ const ResetPassword = () => {
     }
 
     const email = localStorage.getItem('email');
-    const response = await fetch(`http://localhost:5000/api/auth/resetpassword`, {
+    const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/resetpassword`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -26,7 +26,7 @@ const GallerySection = () => {
       const token = localStorage.getItem("token");
 
       const response = await fetch(
-        `http://localhost:5000/api/photos/user/${userId}`,
+        `https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -77,7 +77,7 @@ const GallerySection = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `http://localhost:5000/api/photos/delete/${imageId}`,
+        `https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`,
         {
           method: "DELETE",
           headers: {
@@ -316,7 +316,7 @@ export default GallerySection;
 //     try {
 //       const userId = localStorage.getItem('id');
 //       const token = localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/photos/user/${userId}`, {
+//       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/user/${userId}`, {
 //         headers: {
 //           'Authorization': `Bearer ${token}`
 //         }
@@ -324,7 +324,7 @@ export default GallerySection;
 //       const data = await response.json();
 //       if (response.ok) {
 //         const imagePromises = data.map(async (image) => {
-//           const fullUrl =` http://localhost:5000${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
+//           const fullUrl =` https://cosmicvaultbackendbismillah.onrender.com${image.photoUrl.startsWith('/') ? '' : '/'}${image.photoUrl}`;
 //           try {
 //             const cachedImage = sessionStorage.getItem(fullUrl);
 //             if (cachedImage) {
@@ -387,7 +387,7 @@ export default GallerySection;
 
 //     try {
 //       const token = localStorage.getItem('token');
-//       const response = await fetch(`http://localhost:5000/api/photos/delete/${imageId}`, {
+//       const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/photos/delete/${imageId}`, {
 //         method: 'DELETE',
 //         headers: {
 //           'Content-Type': 'application/json',

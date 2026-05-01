@@ -24,7 +24,7 @@ const SignUp = () => {
     setIsLoading(true); // Set loading state to true
     localStorage.setItem('email', email);
     try {
-      const response = await fetch(`http://localhost:5000/api/auth/createuser`, {
+      const response = await fetch(`https://cosmicvaultbackendbismillah.onrender.com/api/auth/createuser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,7 +14,6 @@ import OTPVerification from './components/VerifyOtp';
 import NotFound from './components/NotFound';
 import Footer from './components/Footer';
 import { useEffect } from 'react';
-
 function App() {
   useEffect(() => {
     document.title = "Cosmic Vault";
